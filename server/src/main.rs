@@ -1,15 +1,25 @@
+use salvo::conn::rustls::{Keycert, RustlsConfig};
 use salvo::prelude::*;
 
 #[handler]
 async fn hello() -> &'static str {
-    "Hello, welcome to the CWE management site"
+    "Welcome to the Common Work Education Management Site"
 }
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt().init();
+    let cert = include_bytes!("/home/johannes/.local/ssl/certs/cwe/cwe.crt").to_vec();
+    let key = include_bytes!("/home/johannes/.local/ssl/certs/cwe/cwe.key").to_vec();
 
     let router = Router::new().get(hello);
-    let acceptor = TcpListener::new("127.0.0.1:5800").bind().await;
+    let config = RustlsConfig::new(Keycert::new().cert(cert.as_slice()).key(key.as_slice()));
+    let listener = TcpListener::new(("127.0.0.1", 8443)).rustls(config.clone());
+
+    let acceptor = QuinnListener::new(config, ("127.0.0.1", 8443))
+        .join(listener)
+        .bind()
+        .await;
+
     Server::new(acceptor).serve(router).await;
 }
