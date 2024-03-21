@@ -8,3 +8,5 @@ members = [
 ]
 resolver = "2"
 
+[workspace.dependencies]
+rust-embed = "8.3.0"
