@@ -37,4 +37,3 @@ async fn main() {
 
     Server::new(acceptor).serve(router).await;
 }
-
