@@ -1,6 +1,6 @@
-mod server_config;
+mod config;
 
-use server_config::ServerConfig;
+use config::ServerConfig;
 
 use rust_embed::RustEmbed;
 use salvo::conn::rustls::{Keycert, RustlsConfig};
@@ -12,10 +12,10 @@ use salvo::serve_static::static_embed;
 struct Assets;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt().init();
 
-    let server_config = ServerConfig::default();
+    let server_config = ServerConfig::new()?;
 
     let router = Router::with_path("<*path>").get(static_embed::<Assets>().fallback("index.html"));
     
@@ -33,4 +33,5 @@ async fn main() {
         .await;
 
     Server::new(acceptor).serve(router).await;
+    Ok(())
 }
