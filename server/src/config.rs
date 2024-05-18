@@ -29,10 +29,6 @@ pub struct ServerConfig {
     pub port: u16,
     pub cert: Vec<u8>,
     pub key: Secret<Vec<u8>>,
-    pub db_host: String,
-    pub db_name: String,
-    pub db_user: String,
-    pub db_password: String,
 }
 
 impl ServerConfig {
@@ -45,11 +41,6 @@ impl ServerConfig {
         let cert = std::fs::read(&cert_path)?;
         let key = Secret::new(std::fs::read(&key_path)?);
 
-        let db_host = dotenv::var("DB_HOST")?;
-        let db_name = dotenv::var("DB_NAME")?;
-        let db_user = dotenv::var("DB_USER")?;
-        let db_password = dotenv::var("DB_PASSWORD")?;
-
-        Ok(Self { cert, key, address, port, db_host, db_name, db_user, db_password })
+        Ok(Self { cert, key, address, port })
     }
 }

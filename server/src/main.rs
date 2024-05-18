@@ -1,9 +1,9 @@
 mod config;
-mod db;
 mod chat;
 
+use db::config::DbPool;
 use config::ServerConfig;
-use db::{create_pool, DbPool};
+use db::create_pool;
 use chat::{get_messages, post_message};
 use rust_embed::RustEmbed;
 use salvo::conn::rustls::{Keycert, RustlsConfig};
