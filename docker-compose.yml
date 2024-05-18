@@ -1,0 +1,25 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    # command: tail -f /dev/null
+    restart: no
+    depends_on:
+      - db
+    env_file: .env-docker
+    ports:
+      - "443:443"
+    volumes:
+      - /home/johannes/.local/ssl/certs/cwe:/ssl/certs/cwe
+      - /home/johannes/Projects/cwe/.env-docker:/usr/src/app/.env
+
+volumes:
+  pgdata:
