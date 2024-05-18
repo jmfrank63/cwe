@@ -25,9 +25,15 @@ RUN mkdir -p tests/src && echo "fn main() {}" > tests/src/main.rs
 # Cache dependencies
 RUN cargo build --release
 
-# Remove dummy source files and copy real source files
+# Remove dummy source files
 RUN rm -f ./core/src/*.rs ./db/src/*.rs ./frontend/src/*.rs ./server/src/*.rs ./tests/src/*.rs
-COPY . .
+
+# Copy real source files
+COPY ./core ./core
+COPY ./db ./db
+COPY ./frontend ./frontend
+COPY ./server ./server
+COPY ./tests ./tests
 
 # Build real binaries
 RUN cargo build --release

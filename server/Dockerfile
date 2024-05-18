@@ -1,18 +1,34 @@
-FROM rust:latest as builder
+# Stage 1: Build the binary
+FROM rust:latest AS builder
 
-# Build stage already defined in the base Dockerfile instructions above.
+# Create app directory
+WORKDIR /app
 
-# The final stage
-FROM debian:buster-slim
+# Copy manifests
+COPY server/Cargo.toml ./server/Cargo.toml
+
+RUN mkdir -p server/src && echo "fn main() {}" > server/src/main.rs
+
+# Remove dummy source files
+RUN rm -f ./server/src/*.rs
+
+# Copy real source files
+COPY . .
+
+# Build the specified workspace
+RUN cargo build --release --manifest-path=server/Cargo.toml
+
+# Stage 2: Create a minimal image with OpenSSL 3.0
+FROM debian:testing-slim
 ARG APP=/usr/src/app
 
-EXPOSE 8080
+EXPOSE 8443
 ENV TZ=Etc/UTC \
     APP_USER=appuser
 
 # Install dependencies and create a user
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata \
+    && apt-get install -y ca-certificates tzdata libssl-dev \
     && rm -rf /var/lib/apt/lists/* \
     && useradd $APP_USER \
     && mkdir -p ${APP}
