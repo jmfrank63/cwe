@@ -12,8 +12,9 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt
-      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key
+      - /home/johannes/.local/ssl/certs/cwe/server.crt:/etc/ssl/private/server.crt
+      - /home/johannes/.local/ssl/certs/cwe/server.key:/etc/ssl/private/server.key
+    
 
   server:
     container_name: server

@@ -1,5 +1,3 @@
-use std::time::SystemTime;
-
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
@@ -7,5 +5,5 @@ use serde::{Deserialize, Serialize};
 struct Message {
     id: i64,
     content: String,
-    timestamp: SystemTime,
+    timestamp: chrono::NaiveDateTime,
 }
