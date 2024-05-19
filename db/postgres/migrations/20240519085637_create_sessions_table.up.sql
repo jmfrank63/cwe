@@ -1,0 +1,6 @@
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    session_id VARCHAR(255) NOT NULL UNIQUE,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT now()
+);

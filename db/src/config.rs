@@ -4,6 +4,7 @@ pub struct DatabaseConfig {
     pub name: String,
     pub user: String,
     pub password: String,
+    pub pool_size: u32,
 }
 
 impl DatabaseConfig {
@@ -13,7 +14,8 @@ impl DatabaseConfig {
         let name = dotenv::var("DB_NAME")?;
         let user = dotenv::var("DB_USER")?;
         let password = dotenv::var("DB_PASSWORD")?;
+        let pool_size = dotenv::var("DB_POOL_SIZE")?.parse()?;
 
-        Ok(Self { host, name, user, password })
+        Ok(Self { host, name, user, password, pool_size })
     }
 }
