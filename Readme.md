@@ -8,7 +8,7 @@ Build the whole project:
 docker build -t cwe:latest .
 ```
 
-Build individual worspace:
+Build individual workspace:
 
 ```bash
 docker build -f ./server/Dockerfile . -t server:latest
@@ -18,10 +18,10 @@ Run:
 
 ```bash
 docker run -d --name server -p 8443:8443 \
-  -v "$HOME"/.local/ssl/certs/cwe:/ssl/certs/cwe \
-  -e CERT_PATH=/ssl/certs/cwe/cwe.crt \
-  -e KEY_PATH=/ssl/certs/cwe/cwe.key \
-  -e ADDRESS=0.0.0.0 \
+  -v "$HOME"/.local/ssl/certs/cwe:/etc/ssl/private \
+  -e CERT_PATH=/etc/ssl/private/server.crt \
+  -e KEY_PATH=/etc/ssl/private/server.key \
+  -e ADDRESS=localhost \
   -e PORT=8443 \
   server:latest
 ```

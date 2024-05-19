@@ -13,4 +13,5 @@ sqlx = { version = "0.7.4", features = [
     "tls-rustls",
     "postgres",
 ] }
+tracing = "0.1"
 common = { path = "../common" }
