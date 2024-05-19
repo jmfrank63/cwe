@@ -10,7 +10,7 @@ jobs:
       SQLX_OFFLINE: true
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Set up Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -34,10 +34,3 @@ jobs:
       uses: actions-rs/cargo@v1
       with:
         command: test
-
-    - name: Deploy to Local VM
-      if: env.LOCAL_DEPLOYMENT != ''
-      run: |
-        scp target/debug/server $LOCAL_DEPLOYMENT:/usr/local/bin
-        ssh $LOCAL_DEPLOYMENT 'systemctl restart my_rust_app_service'
-      shell: bash
