@@ -18,6 +18,12 @@ jobs:
         toolchain: stable
         override: true
 
+    - name: Install SQLx CLI
+      run: cargo install sqlx-cli --no-default-features --features rustls,postgres
+
+    - name: Prepare SQLx (optional)
+      run: cargo sqlx prepare -- --all-targets --all-features
+    
     - name: Build
       uses: actions-rs/cargo@v1
       with:
