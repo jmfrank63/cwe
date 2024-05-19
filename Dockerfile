@@ -9,31 +9,25 @@ WORKDIR /app
 COPY ./Cargo.toml ./Cargo.toml
 
 # This trick will cache your dependencies
-COPY core/Cargo.toml ./core/Cargo.toml
+COPY common/Cargo.toml ./common/Cargo.toml
 COPY db/Cargo.toml ./db/Cargo.toml
-COPY frontend/Cargo.toml ./frontend/Cargo.toml
 COPY server/Cargo.toml ./server/Cargo.toml
-COPY tests/Cargo.toml ./tests/Cargo.toml
 
 # Create dummy source files, otherwise cargo build will throw an error about missing lib.rs
-RUN mkdir -p core/src && echo "fn main() {}" > core/src/main.rs
+RUN mkdir -p common/src && echo "fn main() {}" > common/src/main.rs
 RUN mkdir -p db/src && echo "fn main() {}" > db/src/main.rs
-RUN mkdir -p frontend/src && echo "fn main() {}" > frontend/src/main.rs
 RUN mkdir -p server/src && echo "fn main() {}" > server/src/main.rs
-RUN mkdir -p tests/src && echo "fn main() {}" > tests/src/main.rs
 
 # Cache dependencies
 RUN cargo build --release
 
 # Remove dummy source files
-RUN rm -f ./core/src/*.rs ./db/src/*.rs ./frontend/src/*.rs ./server/src/*.rs ./tests/src/*.rs
+RUN rm -f ./common/src/*.rs ./db/src/*.rs ./server/src/*.rs
 
 # Copy real source files
-COPY ./core ./core
+COPY ./common ./common
 COPY ./db ./db
-COPY ./frontend ./frontend
 COPY ./server ./server
-COPY ./tests ./tests
 
 # Build real binaries
 RUN cargo build --release

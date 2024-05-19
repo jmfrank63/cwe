@@ -1,15 +1,19 @@
 version: '3'
 services:
+
   db:
     build:
       context: .
-      dockerfile: ./db/Dockerfile
+      dockerfile: ./db/postgres/Dockerfile
     container_name: db
-    env_file: ./db/.env
+    env_file: 
+      - ./db/postgres/.env
+    ports:
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/var/lib/postgresql/data/server.crt
-      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/var/lib/postgresql/data/server.key
+      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt
+      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key
 
   server:
     container_name: server
@@ -24,7 +28,7 @@ services:
       - "443:443"
     volumes:
       - /home/johannes/.local/ssl/certs/cwe:/ssl/certs/cwe
-      - /home/johannes/Projects/cwe/.env-docker:/usr/src/app/.env
+      - /home/johannes/Projects/cwe/server/.env:/usr/src/app/.env
 
 volumes:
   pgdata:
