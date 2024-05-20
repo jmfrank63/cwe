@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web-server
+  template:
+    metadata:
+      labels:
+        app: web-server
+    spec:
+      containers:
+      - name: web-server
+        image: your_web_server_image
+        ports:
+        - containerPort: 8443
+        volumeMounts:
+        - name: ssl-certs
+          mountPath: /ssl/private
+      volumes:
+      - name: ssl-certs
+        secret:
+          secretName: web-server-certs
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-server
+spec:
+  selector:
+    app: web-server
+  ports:
+  - port: 8443
+    targetPort: 8443
+    protocol: TCP
