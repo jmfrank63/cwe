@@ -24,11 +24,25 @@ services:
       - db
     env_file: ./server/.env
     ports:
-      - "443:8443"
+      - "8443:8443"
     volumes:
       - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/ssl/private/server.crt
       - /home/johannes/.local/ssl/certs/cwe/cwe.key:/ssl/private/server.key
       - /home/johannes/Projects/cwe/server/.env:/usr/src/app/.env:ro
 
+  haproxy:
+    container_name: haproxy
+    build:
+      context: ./haproxy
+      dockerfile: Dockerfile
+    restart: always
+    env_file: ./haproxy/.env
+    ports:
+      - "443:443"
+      - "8444:8444"
+    depends_on:
+      - server
+    volumes:
+      - /home/johannes/.local/ssl/certs/cwe/admin.pem:/usr/local/etc/haproxy/certs/admin.pem
 volumes:
   pgdata:
