@@ -23,6 +23,12 @@ resource "kubernetes_deployment" "postgres" {
           port {
             container_port = 5432
           }
+          resources {
+            requests = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
+          }
           env_from {
             config_map_ref {
               name = "postgres-env"

@@ -24,6 +24,13 @@ resource "kubernetes_deployment" "web_server" {
             container_port = 8443
           }
 
+          resources {
+            requests = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
+          }
+          
           env_from {
             config_map_ref {
               name = "web-server-env"

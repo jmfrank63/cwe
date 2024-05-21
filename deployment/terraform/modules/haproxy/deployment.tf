@@ -3,7 +3,7 @@ resource "kubernetes_deployment" "haproxy" {
     name = "haproxy"
   }
   spec {
-    replicas = 1
+    replicas                  = 1
     progress_deadline_seconds = 120
     selector {
       match_labels = {
@@ -25,6 +25,13 @@ resource "kubernetes_deployment" "haproxy" {
           }
           port {
             container_port = 8444
+          }
+
+          resources {
+            requests = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
           }
 
           volume_mount {
@@ -60,6 +67,6 @@ resource "kubernetes_deployment" "haproxy" {
       }
     }
   }
-  depends_on = [ kubernetes_config_map.haproxy_config, kubernetes_secret.haproxy_certs,
+  depends_on = [kubernetes_config_map.haproxy_config, kubernetes_secret.haproxy_certs,
   ]
 }
