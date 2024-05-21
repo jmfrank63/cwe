@@ -3,7 +3,7 @@ resource "kubernetes_secret" "web_server_certs" {
     name = "web-server-certs"
   }
   data = {
-    "server.crt" = file("/home/johannes/.local/ssl/certs/cwe/cwe.crt")
-    "server.key" = file("/home/johannes/.local/ssl/certs/cwe/cwe.key")
+    "server.crt" = file(var.local_cert_path)
+    "server.key" = file(var.local_key_path)
   }
 }

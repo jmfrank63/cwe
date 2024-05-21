@@ -11,8 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt:ro
-      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key:ro
+      - ${LOCAL_CERT_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.crt}:/etc/ssl/private/server.crt:ro
+      - ${LOCAL_KEY_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.key}:/etc/ssl/private/server.key:ro
       - ./db/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
 
   server:
@@ -27,9 +27,9 @@ services:
     ports:
       - "8443:8443"
     volumes:
-      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt:ro
-      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key:ro
-      - /home/johannes/Projects/cwe/server/.env:/usr/src/app/.env:ro
+      - ${LOCAL_CERT_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.crt}:/etc/ssl/private/server.crt:ro
+      - ${LOCAL_KEY_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.key}:/etc/ssl/private/server.key:ro
+      - ./server/.env:/usr/src/app/.env:ro
 
   haproxy:
     container_name: haproxy
@@ -44,6 +44,6 @@ services:
     depends_on:
       - server
     volumes:
-      - /home/johannes/.local/ssl/certs/cwe/admin.pem:/etc/ssl/private/admin.pem
+      - ${LOCAL_PEM_PATH:-${HOME}/.local/ssl/certs/cwe/admin.pem}:/etc/ssl/private/admin.pem
 volumes:
   pgdata:

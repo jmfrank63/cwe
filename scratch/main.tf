@@ -24,8 +24,8 @@ resource "kubernetes_secret" "web_server_certs" {
     name = "web-server-certs"
   }
   data = {
-    "cwe.crt" = filebase64("/home/johannes/.local/ssl/certs/cwe/cwe.crt")
-    "cwe.key" = filebase64("/home/johannes/.local/ssl/certs/cwe/cwe.key")
+    "cwe.crt" = file("/home/johannes/.local/ssl/certs/cwe/cwe.crt")
+    "cwe.key" = file("/home/johannes/.local/ssl/certs/cwe/cwe.key")
   }
 }
 
@@ -34,7 +34,7 @@ resource "kubernetes_secret" "haproxy_certs" {
     name = "haproxy-certs"
   }
   data = {
-    "admin.pem" = filebase64("/home/johannes/.local/ssl/certs/cwe/admin.pem")
+    "admin.pem" = file("/home/johannes/.local/ssl/certs/cwe/admin.pem")
   }
 }
 

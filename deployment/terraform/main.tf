@@ -2,19 +2,17 @@ provider "kubernetes" {
   config_path = "~/.kube/config"
 }
 
-# resource "null_resource" "haproxy_config" {
-#   provisioner "local-exec" {
-#     command = "kubectl create configmap haproxy-config --from-file=/home/johannes/Projects/Rust/cwe/haproxy/haproxy.cfg --dry-run=client -o yaml | kubectl apply -f -"
-#   }
-# }
-
 module "postgres" {
   source = "./modules/postgres"
+  local_cert_path = var.local_cert_path
+  local_key_path = var.local_key_path
 }
 
-# module "web_server" {
-#   source = "./modules/web_server"
-# }
+module "web_server" {
+  source = "./modules/web_server"
+  local_cert_path = var.local_cert_path
+  local_key_path = var.local_key_path
+}
 
 # module "haproxy" {
 #   source = "./modules/haproxy"

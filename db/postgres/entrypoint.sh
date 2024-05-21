@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-# # Add postgres user to the ssl-cert group
-# usermod -aG ssl-cert postgres
-
 # Ensure the key file has the correct permissions
 mkdir -p /ssl/private
 chmod 0750 /ssl/private

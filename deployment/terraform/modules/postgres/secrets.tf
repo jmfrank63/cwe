@@ -3,7 +3,7 @@ resource "kubernetes_secret" "postgres_ssl_certs" {
     name = "postgres-ssl-certs"
   }
   data = {
-    "server.crt" = file("/home/johannes/.local/ssl/certs/cwe/cwe.crt")
-    "server.key" = file("/home/johannes/.local/ssl/certs/cwe/cwe.key")
+    "server.crt" = file(var.local_cert_path)
+    "server.key" = file(var.local_key_path)
   }
 }

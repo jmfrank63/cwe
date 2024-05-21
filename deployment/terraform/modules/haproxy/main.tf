@@ -3,7 +3,7 @@ resource "kubernetes_secret" "haproxy_certs" {
     name = "haproxy-certs"
   }
   data = {
-    "admin.pem" = filebase64("/home/johannes/.local/ssl/certs/cwe/admin.pem")
+    "admin.pem" = file("/home/johannes/.local/ssl/certs/cwe/admin.pem")
   }
 }
 
