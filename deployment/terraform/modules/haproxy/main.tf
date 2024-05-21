@@ -13,7 +13,7 @@ resource "kubernetes_deployment" "haproxy" {
   }
   spec {
     replicas = 1
-    progress_deadline_seconds = 180
+    progress_deadline_seconds = 120
     selector {
       match_labels = {
         app = "haproxy"

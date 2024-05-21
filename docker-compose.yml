@@ -11,8 +11,9 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - /home/johannes/.local/ssl/certs/cwe/server.crt:/etc/ssl/private/server.crt
-      - /home/johannes/.local/ssl/certs/cwe/server.key:/etc/ssl/private/server.key
+      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt:ro
+      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key:ro
+      - ./db/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
 
   server:
     container_name: web-server
@@ -26,8 +27,8 @@ services:
     ports:
       - "8443:8443"
     volumes:
-      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/ssl/private/server.crt
-      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/ssl/private/server.key
+      - /home/johannes/.local/ssl/certs/cwe/cwe.crt:/etc/ssl/private/server.crt:ro
+      - /home/johannes/.local/ssl/certs/cwe/cwe.key:/etc/ssl/private/server.key:ro
       - /home/johannes/Projects/cwe/server/.env:/usr/src/app/.env:ro
 
   haproxy:
@@ -35,14 +36,14 @@ services:
     build:
       context: ./haproxy
       dockerfile: Dockerfile
-    restart: always
     env_file: ./haproxy/.env
+    restart: always
     ports:
       - "443:443"
       - "8444:8444"
     depends_on:
       - server
     volumes:
-      - /home/johannes/.local/ssl/certs/cwe/admin.pem:/usr/local/etc/haproxy/certs/admin.pem
+      - /home/johannes/.local/ssl/certs/cwe/admin.pem:/etc/ssl/private/admin.pem
 volumes:
   pgdata:

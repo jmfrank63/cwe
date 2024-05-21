@@ -28,17 +28,24 @@ ENV TZ=Etc/UTC \
 
 # Install dependencies and create a user
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata libssl-dev \
+    && apt-get install -y ca-certificates tzdata libssl-dev gosu \
     && rm -rf /var/lib/apt/lists/* \
+    && groupadd ssl-cert \
     && useradd $APP_USER \
-    && mkdir -p ${APP}
+    && usermod -aG ssl-cert $APP_USER \
+    && mkdir -p ${APP} \
+    && mkdir -p /etc/ssl/private \
+    && chmod 0750 /etc/ssl/private \
+    && chown root:ssl-cert /etc/ssl/private
 
 COPY --from=builder /app/target/release/server ${APP}/server
 COPY --from=builder /app/server/static ${APP}/static
+COPY ./server/entrypoint.sh /entrypoint.sh
 
-RUN chown -R $APP_USER:$APP_USER ${APP}
+RUN chown -R $APP_USER:$APP_USER ${APP} && chmod +x /entrypoint.sh
 
-USER $APP_USER
 WORKDIR ${APP}
+
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["./server"]

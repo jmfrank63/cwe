@@ -1,10 +1,13 @@
 FROM postgres:latest
 
-COPY ./db/postgres/postgresql.conf /etc/postgresql/postgresql.conf
-COPY ./db/postgres/docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./db/postgres/entrypoint.sh /entrypoint.sh
 
-RUN chmod +x /docker-entrypoint.sh
+RUN chmod +x /entrypoint.sh \
+    && apt-get update \
+    && apt-get install -y gosu \
+    && rm -rf /var/lib/apt/lists/* \
+    && usermod -aG ssl-cert postgres
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 CMD ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf"]
