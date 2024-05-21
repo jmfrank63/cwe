@@ -1,12 +1,3 @@
-resource "kubernetes_secret" "haproxy_certs" {
-  metadata {
-    name = "haproxy-certs"
-  }
-  data = {
-    "admin.pem" = file("/home/johannes/.local/ssl/certs/cwe/admin.pem")
-  }
-}
-
 resource "kubernetes_deployment" "haproxy" {
   metadata {
     name = "haproxy"
@@ -27,7 +18,7 @@ resource "kubernetes_deployment" "haproxy" {
       }
       spec {
         container {
-          image = "haproxy"
+          image = "ghcr.io/jmfrank63/cwe-haproxy:latest"
           name  = "haproxy"
           port {
             container_port = 443
@@ -35,28 +26,33 @@ resource "kubernetes_deployment" "haproxy" {
           port {
             container_port = 8444
           }
+
           volume_mount {
-            mount_path = "/usr/local/etc/haproxy/certs"
+            mount_path = "/etc/ssl/private/admin.pem"
+            sub_path   = "admin.pem"
             name       = "haproxy-certs"
           }
+
           volume_mount {
             mount_path = "/usr/local/etc/haproxy/haproxy.cfg"
             sub_path   = "haproxy.cfg"
             name       = "haproxy-config"
           }
         }
+
         volume {
           name = "haproxy-certs"
           secret {
             secret_name = kubernetes_secret.haproxy_certs.metadata.0.name
           }
         }
+
         volume {
           name = "haproxy-config"
           config_map {
             name = kubernetes_config_map.haproxy_config.metadata.0.name
             items {
-              key  = "haproxy_cfg"
+              key  = "haproxy.cfg"
               path = "haproxy.cfg"
             }
           }
@@ -64,31 +60,6 @@ resource "kubernetes_deployment" "haproxy" {
       }
     }
   }
-}
-
-resource "kubernetes_service" "haproxy" {
-  metadata {
-    name = "haproxy"
-  }
-  spec {
-    selector = {
-      app = "haproxy"
-    }
-    port {
-      port        = 443
-      target_port = 443
-    }
-    port {
-      port        = 8444
-      target_port = 8444
-      name        = "admin"
-    }
-    type = "LoadBalancer"
-  }
-}
-
-resource "null_resource" "haproxy_config" {
-  provisioner "local-exec" {
-    command = "kubectl create configmap haproxy-config --from-file=/home/johannes/Projects/Rust/cwe/haproxy/haproxy.cfg --dry-run=client -o yaml | kubectl apply -f -"
-  }
+  depends_on = [ kubernetes_config_map.haproxy_config, kubernetes_secret.haproxy_certs,
+  ]
 }

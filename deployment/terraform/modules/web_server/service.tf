@@ -7,6 +7,7 @@ resource "kubernetes_service" "web_server" {
       app = "web-server"
     }
     port {
+      name = "alt-https"
       port        = 8443
       target_port = 8443
     }

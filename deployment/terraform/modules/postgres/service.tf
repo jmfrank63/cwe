@@ -7,6 +7,7 @@ resource "kubernetes_service" "postgres" {
       app = "postgres"
     }
     port {
+      name = "postgres"
       port        = 5432
       target_port = 5432
     }
