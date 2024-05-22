@@ -15,8 +15,17 @@ module "web_server" {
   depends_on = [ module.postgres ]
 }
 
+module "weather" {
+  source = "./modules/weather"
+  geonames_username = var.geonames_username
+  postgres_user = var.postgres_user
+  postgres_password = var.postgres_password
+  postgres_db = var.postgres_db
+  depends_on = [ module.postgres ]
+}
+
 module "haproxy" {
   source = "./modules/haproxy"
   local_pem_path = var.local_pem_path
-  depends_on = [ module.web_server ]
+  depends_on = [ module.web_server, module.weather ]
 }

@@ -18,5 +18,6 @@ resource "kubernetes_service" "haproxy" {
 
     }
     type = "LoadBalancer"
+    cluster_ip = "10.96.1.254"
   }
 }

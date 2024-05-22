@@ -39,14 +39,14 @@ resource "kubernetes_deployment" "web_server" {
 
           volume_mount {
             name       = "ssl-cert"
-            mount_path = "/ssl/private/server.crt"
+            mount_path = "/etc/ssl/private/server.crt"
             sub_path   = "server.crt"
             read_only  = true
           }
 
           volume_mount {
             name       = "ssl-key"
-            mount_path = "/ssl/private/server.key"
+            mount_path = "/etc/ssl/private/server.key"
             sub_path   = "server.key"
             read_only  = true
           }

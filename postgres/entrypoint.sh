@@ -2,6 +2,8 @@
 set -e
 
 # Ensure the key file has the correct permissions
+mkdir -p /var/lib/postgresql/data
+chown -R postgres:postgres /var/lib/postgresql
 mkdir -p /ssl/private
 chmod 0750 /ssl/private
 chown root:ssl-cert /ssl/private
