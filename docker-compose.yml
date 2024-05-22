@@ -3,7 +3,7 @@ services:
   db:
     build:
       context: .
-      dockerfile: ./db/postgres/Dockerfile
+      dockerfile: ./postgres/Dockerfile
     container_name: pgdb
     env_file:
       - ./db/.env
@@ -13,7 +13,7 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ${LOCAL_CERT_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.crt}:/etc/ssl/private/server.crt:ro
       - ${LOCAL_KEY_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.key}:/etc/ssl/private/server.key:ro
-      - ./db/postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./postgres/postgresql.conf:/etc/postgresql/postgresql.conf:ro
 
   server:
     container_name: web-server

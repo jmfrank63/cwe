@@ -19,6 +19,6 @@ resource "kubernetes_config_map" "postgres_config" {
     name = "postgres-config"
   }
   data = {
-    "postgresql.conf" = file("${path.module}/../../../../db/postgres/postgresql.conf")
+    "postgresql.conf" = file("${path.module}/../../../../postgres/postgresql.conf")
   }
 }

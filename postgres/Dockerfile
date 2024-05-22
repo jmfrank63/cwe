@@ -1,6 +1,6 @@
 FROM postgres:latest
 
-COPY ./db/postgres/entrypoint.sh /entrypoint.sh
+COPY ./postgres/entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /entrypoint.sh \
     && apt-get update \
