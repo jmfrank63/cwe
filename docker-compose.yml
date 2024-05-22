@@ -31,6 +31,18 @@ services:
       - ${LOCAL_KEY_PATH:-${HOME}/.local/ssl/certs/cwe/cwe.key}:/etc/ssl/private/server.key:ro
       - ./server/.env:/usr/src/app/.env:ro
 
+  weather:
+    container_name: weather
+    build:
+      context: ./java-server
+      dockerfile: Dockerfile
+    restart: always
+    depends_on:
+      - db
+    env_file: ./java-server/.env
+    ports:
+      - "8080:8080"
+  
   haproxy:
     container_name: haproxy
     build:
