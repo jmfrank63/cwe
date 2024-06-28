@@ -1,4 +1,4 @@
-# CWE Project
+# Mixed-Deployment-Demo Project
 
 ## A deployment with infrastructure as code show case
 
